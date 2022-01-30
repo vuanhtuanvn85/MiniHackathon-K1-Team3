@@ -14,4 +14,4 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+id: u128  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+poe_field_id: u128  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+poe_value: Vec< u8 >  
-  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+owner: AccountId  
