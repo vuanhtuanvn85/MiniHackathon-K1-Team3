@@ -38,6 +38,10 @@ pub mod pallet {
 	// Learn more about declaring storage items:
 	// https://docs.substrate.io/v3/runtime/storage#declaring-storage-items
     pub(super) type PoeTypes<T: Config> = StorageMap<_, Blake2_128Concat, Vec<u8>, (Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, T::AccountId, T::BlockNumber), ValueQuery>;
+    
+	#[pallet::storage]
+	#[pallet::getter(fn proof)]
+	pub(super) type Proofs<T: Config> = StorageDoubleMap<_, Blake2_128Concat, Vec<u8>, Blake2_128Concat, Vec<u8>, (Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, T::AccountId, T::BlockNumber), ValueQuery>;
 	
 	// Pallets use events to inform users when important changes are made.
 	// https://docs.substrate.io/v3/runtime/events-and-errors
@@ -47,12 +51,14 @@ pub mod pallet {
 		/// Event documentation should end with an array that provides descriptive names for event
 		/// parameters. [poe_types, who]
 		PoeTypeCreated(T::AccountId, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>),
+		ProofCreated(T::AccountId, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>),
 	}
 
 	// Errors inform users that something went wrong.
 	#[pallet::error]
 	pub enum Error<T> {
         PoeTypeAlreadyCreated,
+        ProofAlreadyCreated,
 	}
 
 	// Dispatchable functions allows users to interact with the pallet and invoke state changes.
@@ -77,6 +83,24 @@ pub mod pallet {
             let current_block = <frame_system::Pallet<T>>::block_number();
             PoeTypes::<T>::insert(&poe_type, (&name, &description, &field_1, &field_2, &field_3, &field_4, &field_5, &sender, current_block));
             Self::deposit_event(Event::PoeTypeCreated(sender, poe_type, name, description, field_1, field_2, field_3, field_4, field_5));
+            Ok(())
+        }
+        #[pallet::weight(1_000)]
+        pub fn create_proof(
+            origin: OriginFor<T>,
+            poe_type: Vec<u8>,
+            proof: Vec<u8>,
+            value_1: Vec<u8>,
+            value_2: Vec<u8>,
+            value_3: Vec<u8>,
+            value_4: Vec<u8>,
+            value_5: Vec<u8>,
+        ) -> DispatchResult {
+            let sender = ensure_signed(origin)?;
+            ensure!(!Proofs::<T>::contains_key(&poe_type, &proof), Error::<T>::ProofAlreadyCreated);
+            let current_block = <frame_system::Pallet<T>>::block_number();
+            Proofs::<T>::insert(&poe_type, &proof, (&value_1, &value_2, &value_3, &value_4, &value_5, &sender, current_block));
+            Self::deposit_event(Event::ProofCreated(sender, poe_type, proof, value_1, value_2, value_3, value_4, value_5));
             Ok(())
         }
     }
