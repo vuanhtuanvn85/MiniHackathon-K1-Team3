@@ -66,7 +66,7 @@ pub mod pallet {
 	// Dispatchable functions must be annotated with a weight and must return a DispatchResult.
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-        #[pallet::weight(1_000)]
+        #[pallet::weight(1_000_000)]
         pub fn create_poe_type(
             origin: OriginFor<T>,
             poe_type: Vec<u8>,
@@ -85,7 +85,7 @@ pub mod pallet {
             Self::deposit_event(Event::PoeTypeCreated(sender, poe_type, name, description, field_1, field_2, field_3, field_4, field_5));
             Ok(())
         }
-        #[pallet::weight(1_000)]
+        #[pallet::weight(1_000_000)]
         pub fn create_proof(
             origin: OriginFor<T>,
             poe_type: Vec<u8>,
