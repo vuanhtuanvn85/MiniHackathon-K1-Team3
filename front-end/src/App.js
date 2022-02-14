@@ -1,12 +1,5 @@
 import React, { createRef } from 'react'
-import {
-  Container,
-  Dimmer,
-  Loader,
-  Grid,
-  Sticky,
-  Message,
-} from 'semantic-ui-react'
+import { Container, Dimmer, Loader, Grid, Sticky, Message, } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 
 import { SubstrateContextProvider, useSubstrateState } from './substrate-lib'
@@ -19,6 +12,7 @@ import Events from './Events'
 import Interactor from './Interactor'
 import Metadata from './Metadata'
 import NodeInfo from './NodeInfo'
+import PoeType from './PoeType';
 import PoeAllInOne from './PoeAllInOne';
 import Transfer from './Transfer'
 import Upgrade from './Upgrade'
@@ -82,6 +76,7 @@ function Main() {
             <Events />
           </Grid.Row>
           <Grid.Row>
+            <PoeType />
             <PoeAllInOne />
           </Grid.Row>
         </Grid>
