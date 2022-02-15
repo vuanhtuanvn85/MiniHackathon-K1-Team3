@@ -52,7 +52,7 @@ function Main(props) {
   }
 
   return (
-    <Grid.Column width={8}>
+    <Grid.Column>
       <h1>Create Poe Type</h1>
       <Form success={!!digest && !isCreated()} warning={isCreated()}>
         <Form.Field>

@@ -15,6 +15,7 @@ import NodeInfo from './NodeInfo'
 import PoeType from './PoeType';
 import PoeAllInOne from './PoeAllInOne';
 import Padding from './Padding';
+import ShowProofs from './ShowProofs';
 import Transfer from './Transfer'
 import Upgrade from './Upgrade'
 
@@ -73,6 +74,12 @@ function Main() {
           </Grid.Row>
           <Grid.Row>
             <PoeAllInOne />
+          </Grid.Row>
+          <Grid.Row>
+            <Padding />
+          </Grid.Row>  
+          <Grid.Row>
+            <ShowProofs />
           </Grid.Row>
           <Grid.Row>
             <Padding />
