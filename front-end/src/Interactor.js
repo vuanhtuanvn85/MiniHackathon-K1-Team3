@@ -94,7 +94,10 @@ function Main(props) {
       }
     } else if (interxType === 'EXTRINSIC') {
       const metaArgs = api.tx[palletRpc][callable].meta.args
-
+console.log(palletRpc);      
+console.log(callable);      
+console.log("====================EXTRINSIC=======");
+console.log(metaArgs);
       if (metaArgs && metaArgs.length > 0) {
         paramFields = metaArgs.map(arg => ({
           name: arg.name.toString(),

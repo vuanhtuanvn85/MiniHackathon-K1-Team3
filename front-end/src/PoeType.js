@@ -27,9 +27,9 @@ function Main(props) {
   const [field5Value, setField5Value] = useState('')
 
   const bufferToDigest = () => {
-  const hash = blake2AsHex(nameValue, 256);
-    setDigest(hash);
-  };
+    const hash = blake2AsHex(nameValue + field1Value + field2Value + field3Value + field4Value + field5Value, 256);
+      setDigest(hash);
+    };
 
   useEffect(() => {
     let unsubscribe

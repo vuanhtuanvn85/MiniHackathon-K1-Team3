@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Grid, Card, Statistic, Message, Dropdown } from 'semantic-ui-react'
+import { Form, Input, Grid, Card, Statistic, Message, Dropdown, Label } from 'semantic-ui-react'
 
 import { useSubstrateState } from './substrate-lib'
 import { TxButton } from './substrate-lib/components'
@@ -15,79 +15,86 @@ function Main(props) {
   const [status, setStatus] = useState('')
 
   // The currently stored value
-  const [currentValue, setCurrentValue] = useState(0)
   const [digest, setDigest] = useState('');
   const [owner, setOwner] = useState('');
   const [block, setBlock] = useState(0);
-  const [nameValue, setNameValue] = useState('')
-  const [descriptionValue, setDescriptionValue] = useState('')
+
+  const [field1Label, setField1Label] = useState('')
+  const [field2Label, setField2Label] = useState('')
+  const [field3Label, setField3Label] = useState('')
+  const [field4Label, setField4Label] = useState('')
+  const [field5Label, setField5Label] = useState('')
+  
+  const [poeTypeValue, setpoeTypeValue] = useState('')
   const [field1Value, setField1Value] = useState('')
   const [field2Value, setField2Value] = useState('')
   const [field3Value, setField3Value] = useState('')
   const [field4Value, setField4Value] = useState('')
   const [field5Value, setField5Value] = useState('')
 
-  const [poeTypeNames, setPoeTypeNames] = useState([]);
+  const [poeTypeNames, setPoeTypeNames] = useState([])
+  const [paramFields, setParamFields] = useState([])
 
   const initFormState = {
     poeTypeName: '',
-    callable: '',
-    inputParams: []
+
   };
 
   const [formState, setFormState] = useState(initFormState);
-  const { poeTypeName, callable, inputParams } = formState;
+  const { poeTypeName } = formState;
 
   const bufferToDigest = () => {
-  const hash = blake2AsHex(nameValue, 256);
+    const temp = field1Value + field2Value + field3Value + field4Value + field5Value;
+    console.log(temp);
+    const hash = blake2AsHex(temp, 256);
+    console.log(hash);
     setDigest(hash);
   };
-
-
-
-
  
   const updatePoeTypeNames = () => {
     if (!api) { return; }
-    const apiType = api.rpc;
-    console.log("apiType");
-    console.log(apiType);
-    console.log("poeTypes");
     const temp = api.query.poeAllInOne.poeTypes.entries((result) => {
-      console.log("result");
-      console.log(result);
-      const poeTypeNames2 = result
-      .map(pr => ({ key: u8aToString(pr[0]), value: pr[0], text: pr[0] }));
-      console.log("poeTypeNames2");
-      console.log(poeTypeNames2);
-
-      setPoeTypeNames(poeTypeNames2);
+      const poeTypeNames = result
+      .map(type => ({ key: type[1][0].toHuman(), value: type[1][0].toHuman(), text: type[1][0].toHuman() }));
+      setPoeTypeNames(poeTypeNames);
     });
-    console.log("Object.keys(apiType)");
-    console.log(Object.keys(apiType));
-    const poeTypeNames = Object.keys(apiType).sort()
-      .filter(pr => Object.keys(apiType[pr]).length > 0)
-      .map(pr => ({ key: pr, value: pr, text: pr }));
-    console.log("poeTypeNames");
-    console.log(poeTypeNames);
-
   };
 
-  useEffect(updatePoeTypeNames, [api]);
 
-  // useEffect(() => {
-  //   let unsubscribe
-  //   api.query.poeAllInOne
-  //     .poeTypes(digest, result => {
-  //       // Our storage item returns a tuple, which is represented as an array.
-  //       setOwner(result[7].toString());
-  //       setBlock(result[8].toNumber());
-  //     })
-  //     .then(unsub => {
-  //       unsubscribe = unsub;
-  //     });
-  //   return () => unsubscribe && unsubscribe();
-  // }, [digest, api.query.poeAllInOne]);
+  const updateParamFields = () => {
+    if (!api) { return; }
+    const temp = api.query.poeAllInOne.poeTypes.entries((result) => {
+      for (let i = 0; i < result.length; i++) {
+        if (result[i][1][0].toHuman() === poeTypeName) {
+          setpoeTypeValue(result[i][0].toHuman()[0])
+          setField1Label(result[i][1][2].toHuman())
+          setField2Label(result[i][1][3].toHuman())
+          setField3Label(result[i][1][4].toHuman())
+          setField4Label(result[i][1][5].toHuman())
+          setField5Label(result[i][1][6].toHuman())
+          console.log(field1Label);          
+          }
+        }
+    });
+  }
+
+
+  useEffect(updatePoeTypeNames, [api]);
+  useEffect(updateParamFields, [api, poeTypeName]);
+
+  useEffect(() => {
+    let unsubscribe
+    api.query.poeAllInOne
+      .proofs(poeTypeValue, digest, result => {
+        // Our storage item returns a tuple, which is represented as an array.
+        setOwner(result[5].toString());
+        setBlock(result[6].toNumber());
+      })
+      .then(unsub => {
+        unsubscribe = unsub;
+      });
+    return () => unsubscribe && unsubscribe();
+  }, [digest, api.query.poeAllInOne]);
 
 
   // We can say a file digest is claimed if the stored block number is not 0
@@ -97,24 +104,14 @@ function Main(props) {
 
 
   const onPoeTypeNameChange = (_, data) => {
-    console.log(data.value);
-    console.log('onPoeTypeNameChange');
-    // setFormState(formState => {
-    //   let res;
-    //   const { state, value } = data;
-    //   if (typeof state === 'object') {
-    //     // Input parameter updated
-    //     const { ind, paramField: { type } } = state;
-    //     const inputParams = [...formState.inputParams];
-    //     inputParams[ind] = { type, value };
-    //     res = { ...formState, inputParams };
-    //   } else if (state === 'poeTypeName') {
-    //     res = { ...formState, [state]: value, callable: '', inputParams: [] };
-    //   } else if (state === 'callable') {
-    //     res = { ...formState, [state]: value, inputParams: [] };
-    //   }
-    //   return res;
-    // });
+    setFormState(formState => {
+      let res;
+      const { state, value } = data;
+      if (state === 'poeTypeName') {
+        res = { ...formState, [state]: value, inputParams: [] };
+      }
+      return res;
+    });
   };
 
   return (
@@ -134,7 +131,75 @@ function Main(props) {
             options={poeTypeNames}
           />
         </Form.Field>
-        
+        <Form.Field>
+          <Input
+            label="Poe type"
+            state="poe_type"
+            type="text"
+            value={poeTypeValue}
+          />
+          {/* Show this message if the proof is available to be created */}
+          <Message success header="Proof is available" />
+          {/* Show this message if the proof is already created. */}
+          <Message
+            warning
+            header="Proof is taken"
+            list={[`Owner: ${owner}`, `Block: ${block}`]}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Input
+            label={field1Label}
+            state="field_1"
+            type="text"
+            onChange={(_, {value}) => {setField1Value(value); bufferToDigest();}}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Input
+            label={field2Label}
+            state="field2_"
+            type="text"
+            onChange={(_, { value }) => {setField2Value(value); bufferToDigest();}}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Input
+            label={field3Label}
+            state="field_3"
+            type="text"
+            onChange={(_, { value }) => {setField3Value(value); bufferToDigest();}}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Input
+            label={field4Label}
+            state="field_4"
+            type="text"
+            onChange={(_, { value }) => {setField4Value(value); bufferToDigest();}}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Input
+            label={field5Label}
+            state="field_5"
+            type="text"
+            onChange={(_, { value }) => {setField5Value(value); bufferToDigest();}}
+          />
+        </Form.Field>
+        <Form.Field style={{ textAlign: 'center' }}>
+          <TxButton
+            label="Create Proof"
+            type="SIGNED-TX"
+            setStatus={setStatus}
+            attrs={{
+              palletRpc: 'poeAllInOne',
+              callable: 'createProof',
+              inputParams: [poeTypeValue, digest, field1Value, field2Value, field3Value, field4Value, field5Value],
+              paramFields: [true, true, true, true, true, true, true],
+            }}
+          />
+        </Form.Field>
         <div style={{ overflowWrap: 'break-word' }}>{status}</div>
       </Form>
     </Grid.Column>
