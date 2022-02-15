@@ -14,6 +14,7 @@ import Metadata from './Metadata'
 import NodeInfo from './NodeInfo'
 import PoeType from './PoeType';
 import PoeAllInOne from './PoeAllInOne';
+import Padding from './Padding';
 import Transfer from './Transfer'
 import Upgrade from './Upgrade'
 
@@ -58,6 +59,27 @@ function Main() {
       </Sticky>
       <Container>
         <Grid stackable columns="equal">
+          <Grid.Row>
+            <PoeType />
+          </Grid.Row>
+          <Grid.Row>
+            <Padding />
+          </Grid.Row>
+          <Grid.Row>
+            <Events />
+          </Grid.Row>
+          <Grid.Row>
+            <Padding />
+          </Grid.Row>
+          <Grid.Row>
+            <PoeAllInOne />
+          </Grid.Row>
+          <Grid.Row>
+            <Padding />
+          </Grid.Row>  
+          <Grid.Row>
+            <Interactor />
+          </Grid.Row>
           <Grid.Row stretched>
             <NodeInfo />
             <Metadata />
@@ -70,14 +92,6 @@ function Main() {
           <Grid.Row>
             <Transfer />
             <Upgrade />
-          </Grid.Row>
-          <Grid.Row>
-            <Interactor />
-            <Events />
-          </Grid.Row>
-          <Grid.Row>
-            <PoeType />
-            <PoeAllInOne />
           </Grid.Row>
         </Grid>
       </Container>
