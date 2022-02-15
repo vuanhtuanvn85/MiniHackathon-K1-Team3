@@ -50,26 +50,14 @@ function Main(props) {
   const updatePoeTypeNames = () => {
     if (!api) { return; }
     const apiType = api.rpc;
-    console.log("apiType");
-    console.log(apiType);
-    console.log("poeTypes");
     const temp = api.query.poeAllInOne.poeTypes.entries((result) => {
-      console.log("result");
-      console.log(result);
       const poeTypeNames2 = result
-      .map(pr => ({ key: u8aToString(pr[0]), value: pr[0], text: pr[0] }));
-      console.log("poeTypeNames2");
-      console.log(poeTypeNames2);
-
+      .map(pr => ({ key: pr[0].toHuman(), value: pr[0].toHuman(), text: pr[1].toHuman()[0] })); 
       setPoeTypeNames(poeTypeNames2);
     });
-    console.log("Object.keys(apiType)");
-    console.log(Object.keys(apiType));
-    const poeTypeNames = Object.keys(apiType).sort()
-      .filter(pr => Object.keys(apiType[pr]).length > 0)
-      .map(pr => ({ key: pr, value: pr, text: pr }));
-    console.log("poeTypeNames");
-    console.log(poeTypeNames);
+    // const poeTypeNames = Object.keys(apiType).sort()
+    //   .filter(pr => Object.keys(apiType[pr]).length > 0)
+    //   .map(pr => ({ key: pr, value: pr, text: pr }));
 
   };
 
@@ -97,8 +85,6 @@ function Main(props) {
 
 
   const onPoeTypeNameChange = (_, data) => {
-    console.log(data.value);
-    console.log('onPoeTypeNameChange');
     // setFormState(formState => {
     //   let res;
     //   const { state, value } = data;
