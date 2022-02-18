@@ -9,3 +9,6 @@ Select PEO Type
   
 Show Proofs
 ![image](images/result_04.png)  
+  
+Full demo
+![image](images/demo_minihackathon.gif)  
