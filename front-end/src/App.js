@@ -85,6 +85,18 @@ function Main() {
             <Padding />
           </Grid.Row>  
           <Grid.Row>
+            <Padding />
+          </Grid.Row>  
+          <Grid.Row>
+            <Padding />
+          </Grid.Row>  
+          <Grid.Row>
+            <Padding />
+          </Grid.Row>  
+          <Grid.Row>
+            <Padding />
+          </Grid.Row>  
+          <Grid.Row>
             <Interactor />
           </Grid.Row>
           <Grid.Row stretched>

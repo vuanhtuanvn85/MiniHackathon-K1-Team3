@@ -6,7 +6,6 @@ import { TxButton } from './substrate-lib/components'
 
 // Polkadot-JS utilities for hashing data.
 import { blake2AsHex } from '@polkadot/util-crypto';
-import { hexToString, u8aToString } from '@polkadot/util';
 
 function Main(props) {
   const { api } = useSubstrateState()
